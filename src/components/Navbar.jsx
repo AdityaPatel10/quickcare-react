@@ -6,21 +6,19 @@ const Navbar = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
 
-  const { logout } = useAuth();
-  useEffect(() => {
-    const user = localStorage.getItem("currentUser");
-    setIsLoggedIn(!!user);
-    console.log(!!user);
-    console.log(user);
-  }, []);
+  const { logout, isAuthenticated } = useAuth();
+  // useEffect(() => {
+  //   const user = localStorage.getItem("currentUser");
+  //   // setIsLoggedIn(!!user);
+  //   console.log(!!user);
+  //   console.log(user);
+  // }, []);
 
-  const handleLogout = async (e) => {
-    // localStorage.removeItem("currentUser");
-    e.preventDefault();
-    await logout();
-    setIsLoggedIn(false);
-    navigate("/login");
-  };
+  // const handleLogout = async (e) => {
+  //   e.preventDefault();
+  //   await logout();
+  //   // navigate("/login");
+  // };
 
   return (
     <div>
@@ -63,11 +61,11 @@ const Navbar = ({ children }) => {
                 Prescription
               </NavLink>
             </li>
-            {isLoggedIn ? (
+            {isAuthenticated ? (
               <li>
                 <button
-                  onClick={handleLogout}
-                  className="text-black flex border-transparent shadow-xl px-2 py-1 rounded-xl bg-[#E2E2E2] hover:text-white hover:bg-[#828282]"
+                  onClick={logout}
+                  className="text-black flex border-transparent shadow-xl px-2 py-1 rounded-xl bg-[#E2E2E2] hover:text-white hover:bg-red-500"
                 >
                   Logout
                 </button>
@@ -78,8 +76,8 @@ const Navbar = ({ children }) => {
                   to="/login"
                   className={(e) => {
                     return e.isActive
-                      ? "text-white bg-[#828282] flex border-transparent shadow-xl px-2 py-1 rounded-xl"
-                      : "flex border-transparent shadow-xl px-2 py-1 rounded-xl bg-[#E2E2E2]";
+                      ? "text-white bg-green-500 flex border-transparent shadow-xl px-2 py-1 rounded-xl"
+                      : "flex border-transparent shadow-xl px-2 py-1 rounded-xl bg-[#E2E2E2] hover:text-white hover:bg-green-500";
                   }}
                 >
                   Login

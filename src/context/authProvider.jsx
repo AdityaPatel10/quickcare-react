@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 
 const AuthContext = createContext();
 
@@ -23,8 +23,9 @@ export const AuthProvider = ({ children }) => {
       );
 
       if (user) {
-        alert("Login Successfully");
-        localStorage.setItem("currentUser", JSON.stringify(user));
+        // alert("Login Successfully");
+        const {password, confirmPassword, ...safeUser} = user;
+        localStorage.setItem("currentUser", JSON.stringify(safeUser));
         setUser(user);
 
         return;
@@ -42,6 +43,7 @@ export const AuthProvider = ({ children }) => {
   const register = (userData) => {
     try {
       setLoading(true);
+      setError(null);
 
       const users = JSON.parse(localStorage.getItem("users")) || [];
 
@@ -57,15 +59,20 @@ export const AuthProvider = ({ children }) => {
         setError("Password and confirm password does not matched");
         throw new Error("Password and confirm password does not matched");
       }
+      const {password, confirmPassword, ...safeUserData} = userData;
+
 
       users.push(userData);
       localStorage.setItem("users", JSON.stringify(users));
-      localStorage.setItem("currentUser", JSON.stringify(userData));
+      localStorage.setItem("currentUser", JSON.stringify(safeUserData));
 
       setUser(userData);
       setError(null);
     } catch (error) {
       setError(error.message || "Something went wrong");
+    }
+    finally{
+      setLoading(false);
     }
   };
 
@@ -83,93 +90,3 @@ export const AuthProvider = ({ children }) => {
   );
 };
 export const useAuth = () => useContext(AuthContext);
-// import React, { createContext, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-// const AuthContext = createContext();
-
-// const getUserFromLocal = () => {
-//   return localStorage.getItem("currentUser") ?? null;
-// };
-
-// export const AuthProvider = ({ children }) => {
-//   const [user, setUser] = useState(getUserFromLocal);
-//   const [loading, setLoading] = useState(false);
-//   const [error, setError] = useState(null);
-//   // const navigate = useNavigate();
-//   const isAuthenticated = !!user;
-// const login = (email, password) => {
-//   try {
-//     setLoading(true);
-//     setError(null);
-//     const users = JSON.parse(localStorage.getItem("users")) || [];
-//     if (users) {
-//       const user = users.find(
-//         (user) => user.email == email && user.password === password
-//       );
-
-//       if (user) {
-//         setUser(user);
-//         alert("Login Successfully");
-//         const currentUser = localStorage.setItem(
-//           "currentUser",
-//           JSON.stringify(user)
-//         );
-//         return;
-//       } else {
-//         alert("Invalid Email or Password");
-//       }
-//     }
-//   } catch (error) {
-//     setError(error.message);
-//   } finally {
-//     setLoading(false);
-//   }
-// };
-
-//   const register = (userData) => {
-//     try {
-//       setLoading(true);
-//       setError(null);
-//       const users = JSON.parse(localStorage.getItem("users")) || [];
-
-//       const exsistingUser = users.find((user) => user.email === userData.email);
-
-//       if (exsistingUser) {
-//         console.log("existing");
-//         setError("User already exists");
-//         throw new Error("User already exists");
-//       }
-//       if (userData.password !== userData.confirmPassword) {
-//         console.log("pass");
-
-//         setError("Password and Confirm Password does not match");
-//         throw new Error("Password and Confirm Password does not match");
-//       }
-
-//       const newUser = {
-//         ...user,
-//       };
-
-//       // delete newUser.password;
-//       // delete newUser.confirmPassword;
-//       users.push(newUser);
-//       localStorage.setItem("users", JSON.stringify(users));
-//       setUser(newUser);
-//       localStorage.setItem("currentUser", JSON.stringify(newUser));
-//       alert("Registration Successfully");
-//     } catch (error) {
-//       setError(error.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   return (
-//     <AuthContext.Provider
-//       value={{ loading, user, error, isAuthenticated, login, logout, register }}
-//     >
-//       {children}
-//     </AuthContext.Provider>
-//   );
-// };

@@ -5,10 +5,11 @@ import { useAuth } from "../context/authProvider";
 
 const Register = () => {
   const [userData, setUserData] = useState({
+    id: Date.now(),
     name: "",
     email: "",
     age: "",
-    gender: "",
+    gender: "male",
     mobile: "",
     password: "",
     confirmPassword: "",

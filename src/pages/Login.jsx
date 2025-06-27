@@ -21,8 +21,7 @@ const Login = () => {
     if (debouncedPass) {
       console.log("Debounced password:", debouncedPass);
     }
-    if(isAuthenticated) navigate('/')
-    
+    if (isAuthenticated) navigate("/");
   }, [debouncedEmail, debouncedPass]);
 
   const handleLogin = async (e) => {
@@ -70,8 +69,12 @@ const Login = () => {
             </a>
           </div>
 
-          <button className="bg-black text-white text-md p-2 px-8 rounded-xl cursor-pointer hover:bg-gray-800 transition duration-300">
-            Login
+          <button
+            disabled={loading}
+            type="submit"
+            className="bg-black text-white text-md p-2 px-8 rounded-xl cursor-pointer hover:bg-gray-800 transition duration-300"
+          >
+            {loading ? "logging in..." : "Login"}
           </button>
           {error && <p className="text-red-900 flex justify-center">{error}</p>}
           <div className="flex flex-col items-center">
